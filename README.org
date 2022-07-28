@@ -1,0 +1,27 @@
+* CamStan's homedir settings files
+  These files are organized by type. Using the =synch.sh= script, local changes can be pulled. 
+  Private info is stored in the =~/.extra= file on each local machine. Source'd by bash.
+
+** Setup
+   All config files are located in ~/.config/ directory and are grouped into sub-directories by type. 
+   From here, all dot file expected in different locations by the operating system are sym-linked.
+   These are listed in the =links= file of each directory.
+
+*** Dot file symlinks
+    - ~/.bash_profile
+    - ~/.bashrc
+    - ~/.inputrc
+    - ~/.vimrc
+
+** Installation
+   Get the git repo, then update homedir
+   : git clone git@github.com:camstan/dotfiles.git
+   : cd dotfiles
+   : ./synch.sh
+
+** Inspiration stolen from 
+
+*** Other dotfile repositories
+   - https://github.com/gonsie/dotfiles
+   - https://github.com/mathiasbynens/dotfiles
+   - https://github.com/necolas/dotfiles

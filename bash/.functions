@@ -1,0 +1,85 @@
+# cd, then la
+if [[ $- == *i* ]]; then 
+    ca() {
+         builtin cd "$@" && la
+    }
+fi
+
+# Create a new directory and enter it
+function md() {
+         mkdir -p "$@" && cd "$@"
+}
+
+# Use Git’s colored diff when available
+hash git &>/dev/null
+if [ $? -eq 0 ]; then
+   function diff() {
+            git diff --no-index --color-words "$@"
+            }
+fi
+
+# Move something, then follow it
+function fl() {
+         mv $1 $2
+         cd $2
+}
+
+# Switch two files
+function sw() {
+         mv $1 ${2}-temp
+         mv $2 $1
+         mv ${2}-temp $2
+}
+
+# Change the name of the window
+function title() {
+         echo -n -e "\033]0;$1\007"
+}
+
+# Append to a file name
+function mva() {
+         mv $1 $1.$2
+}
+
+# cat a specific line
+function catl() {
+         cat $2 | head -$1 | tail -1
+}
+
+# spack env activate $1
+function spacktivate() {
+    [[ $# -ne 1 ]] && \
+        { echo "USAGE: spacktivate env-name|(--help|-h)"; return 1; }
+    
+    if [[ $1 == "-h" || $1 == "--help" ]]; then
+        echo "spacktivate is an alias for \`spack env activate\`"
+        echo "Call spacktivate with an available env name:"
+        spack env list
+    else
+        spack env activate $1
+    fi
+}
+
+# source spack environment loads file
+function spackload() {
+    # check if in active environment
+    local env_status=$(spack env status | cut -d' ' -f2-)
+    if [[ $env_status = "No active environment" ]]; then
+        echo "spackload should only be used within an active environment"
+        echo "Call spacktivate with an available env name first:"
+        spack env list
+        return 1
+    fi
+
+    # get current env name and set loads file location
+    local env_name=$(spack env status | grep -oE '[^ ]+$')
+    local env_location=$SPACK_ROOT/var/spack/environments/$env_name
+
+    if [[ -f ${env_location}/loads ]]; then
+        echo "sourcing environment loads file..."
+        source ${env_location}/loads
+        ml
+    else
+        echo "No environment loads file found. Manually load mods or create a loads file."
+    fi
+}
