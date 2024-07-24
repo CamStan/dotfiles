@@ -30,31 +30,6 @@ function fileLoop() {
     done
 }
 
-if [ "$first_time" = true ]; then
-    echo "** Installing Bashmarks **"
-    cd ../
-    git clone https://github.com/gonsie/bashmarks.git
-    cd bashmarks
-    make install
-
-    echo "** Installing Fishmarks **"
-    cd ../
-    git clone https://github.com/gonsie/fishmarks.git
-    cd fishmarks
-    make install
-
-    echo "** Setting up Git **"
-    echo -ne "Enter user.name: "
-    read username
-    echo -ne "Enter user.email: "
-    read useremail
-    git config --global user.name "$username"
-    git config --global user.email "$useremail"
-
-    echo "* Setup Complete *"
-    echo "Please review the files saved in $install_dir/originals"
-fi
-
 # create install_dir if it doesn't exist
 if [ ! -e $install_dir ]; then
     echo "* Welcome *"
